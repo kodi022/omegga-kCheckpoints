@@ -1,18 +1,18 @@
 {
   "name": "kCommands",
-  "description": "A typed safe Omegga plugin.",
+  "description": "Silly/useful commands",
   "author": "Kodi022",
   "config": 
   {
     "Authorized-Users": 
     {
-      "description": "For use of restricted commands (some commands require debug and auth)",
+      "description": "For use of restricted commands",
       "type": "players",
       "default": []
     },
     "Spamhurt-Speed": 
     {
-      "description": "Speed that spamhurt will do damage",
+      "description": "Millisecond interval that spamhurt will do damage",
       "type": "number",
       "default": 100
     },

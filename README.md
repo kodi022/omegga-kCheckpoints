@@ -23,10 +23,10 @@ Just a simple plugin that gives a few useful/fun commands to mess with
 
 Use the commands
 
-Im too lazy to list here rn, refer to `/plugins kCommands` in game or omegga's webui
+refer to `/plugins kCommands` in game or omegga's webui for better info
 
-/hurt
-/spamhurt
-/middle
-/dm
-/pos
+-/hurt
+-/spamhurt
+-/middle
+-/dm
+-/pos
