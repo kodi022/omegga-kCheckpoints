@@ -17,7 +17,7 @@ Just a simple plugin that gives a few useful/fun commands to mess with
 
 ## Install
 
-`omegga install gh:Kodi022\/kCommands`
+`omegga install gh:Kodi022/kCommands`
 
 ## Usage
 
