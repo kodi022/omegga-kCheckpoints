@@ -1,0 +1,107 @@
+{
+  "name": "kCommands",
+  "description": "A typed safe Omegga plugin.",
+  "author": "Kodi022",
+  "config": 
+  {
+    "Authorized-Users": 
+    {
+      "description": "For use of restricted commands (some commands require debug and auth)",
+      "type": "players",
+      "default": []
+    },
+    "Spamhurt-Speed": 
+    {
+      "description": "Speed that spamhurt will do damage",
+      "type": "number",
+      "default": 100
+    },
+    "Enable-Direct-Messages": 
+    {
+      "description": "Should Direct messages be allowed on the server?",
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "commands": 
+  [
+    {
+      "name": "/hurt",
+      "description": "Hurts someone for specified number of damage. requires auth",
+      "exmaple": "/hurt kod 5",
+      "args": 
+      [
+        {
+          "name": "name",
+          "description": "someones name (uses fuzzy search). can also use * to hurt all",
+          "required": true
+        },
+        {
+          "name": "damage",
+          "description": "number to hurt. can use decimals. defaults to 1 if empty/invalid",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "/spamhurt",
+      "description": "Hurts someone a specified number of damage for a specified amount of hits. requires auth",
+      "exmaple": "/spamhurt kod 0.5 25",
+      "args": 
+      [
+        {
+          "name": "name",
+          "description": "someones name (uses fuzzy search). can also use * to hurt all",
+          "required": true
+        },
+        {
+          "name": "damage",
+          "description": "number to hurt. can use decimals. defaults to 1 if empty/invalid",
+          "required": false
+        },
+        {
+          "name": "hit amount",
+          "description": "how many times to apply damage. defaults to 25 if empty/invalid",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "/pos",
+      "description": "Gets your coordinate position",
+      "exmaple": "/pos",
+      "args": []
+    },
+    {
+      "name": "/dm",
+      "description": "Send a Direct message to someone else. If nothing happens then it is disabled",
+      "exmaple": "/dm kod isnt that silly",
+      "args": 
+      [
+        {
+          "name": "name",
+          "description": "recipients name (uses fuzzy search)",
+          "required": true
+        },
+        {
+          "name": "message",
+          "description": "whatever message you intend to send",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "/middle",
+      "description": "Send a middle text broadcast",
+      "exmaple": "/middle this shows up on the screen",
+      "args": 
+      [
+        {
+          "name": "message",
+          "description": "whatever message you intend to send (allows rich text)",
+          "required": true
+        }
+      ]
+    }
+  ]
+}
