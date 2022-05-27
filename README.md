@@ -25,8 +25,8 @@ Use the commands
 
 refer to `/plugins kCommands` in game or omegga's webui for better info
 
--/hurt
--/spamhurt
--/middle
--/dm
--/pos
+- /hurt
+- /spamhurt
+- /middle
+- /dm
+- /pos
