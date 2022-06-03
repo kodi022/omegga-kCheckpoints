@@ -28,65 +28,70 @@ export default class Plugin implements OmeggaPlugin<Config, Storage> {
   async init() {
     const auth = this.config["Authorized-Users"];
     const spamhurt_speed = this.config["Spamhurt-Speed"];
-    const enable_dms = this.config["Enable-Direct-Messages"];
+    let commands_array: string[] = [];
     let time_limits: TimeCheck[] = [];
 
-    Omegga.on('cmd:hurt', async (speaker: string, name: string, number: string) => 
-    {
-      if (auth.find(e => e.name == speaker)) {
-        if (!name) { command_print("/hurt (name) (damage)", speaker); return; }
-
-        const player: OmeggaPlayer = Omegga.findPlayerByName(name) || undefined;
-
-        let damage: number = Number(number);
-        if (isNaN(damage) || damage == 0) { damage = 1; }
-
-        if (name === "*") {
-          const players: IPlayerPositions = await Omegga.getAllPlayerPositions();
-          for (let e of players) e.player.damage(damage);
-          font_print(`Hurt everyone for ${damage}`, {whisper: speaker, color: "f66"})
-        } else if (player) {
-          player.damage(damage);
-          font_print(`Hurt ${player.name} for ${damage}`, {whisper: speaker, color: "f66"});
-        } else { font_print(`Couldn't find ${name}`, {whisper: speaker}); }
-      } else { warn_print(`You're not authorized`, speaker); }
-    });
-
-    Omegga.on('cmd:spamhurt', async (speaker: string, name: string, number: string, number2: string) => {
-      if (auth.find(e => e.name == speaker)) {
-        if (!name) { command_print("/spamhurt (name) (damage) (amount of hits)", speaker); return; }
-
-        const player: OmeggaPlayer = Omegga.findPlayerByName(name) || undefined;
-        if (!player && name != "*") { font_print("Couldn't find player.", {whisper: speaker, size: 26}); return; }
-
-        let damage: number = Number(number);
-        let times: number = Number(number2);
-        if (isNaN(damage) || damage < 0) { damage = 1; }
-        if (isNaN(times) || times < 1) { times = 25; }
-
-        if (name === "*") {
-          let players: IPlayerPositions = await Omegga.getAllPlayerPositions();
-          font_print(`Hurt everyone ${damage} damage ${times} times`, {color: "f66"});
-          for (let i = 0; i < times; i++) {
+    if (this.config["Enable-Hurt-Commands"]) {
+      Omegga.on('cmd:hurt', async (speaker: string, name: string, number: string) => {
+        if (auth.find(e => e.name == speaker)) {
+          if (!name) { command_print("/hurt (name) (damage)", speaker); return; }
+  
+          const player: OmeggaPlayer = Omegga.findPlayerByName(name) || undefined;
+  
+          let damage: number = Number(number);
+          if (isNaN(damage) || damage == 0) { damage = 1; }
+  
+          if (name === "*") {
+            const players: IPlayerPositions = await Omegga.getAllPlayerPositions();
             for (let e of players) e.player.damage(damage);
-            await sleep(spamhurt_speed);
-          }  
-        } else if (player) {
-          font_print(`Hurt ${player.name} ${times} times for ${damage} damage`, {whisper: speaker, color: "f66"});
-          for (let i = 0; i < times; i++) {
+            font_print(`Hurt everyone for ${damage}`, {whisper: speaker, color: "f66"})
+          } else if (player) {
             player.damage(damage);
-            await sleep(spamhurt_speed);
-          }  
-        } else { font_print(`Couldn't find ${name}`, {whisper: speaker}); }
-      } else { warn_print(`You're not authorized`, speaker); }
-    });
+            font_print(`Hurt ${player.name} for ${damage}`, {whisper: speaker, color: "f66"});
+          } else { font_print(`Couldn't find ${name}`, {whisper: speaker}); }
+        } else { warn_print(`You're not authorized`, speaker); }
+      });
+    
+      Omegga.on('cmd:spamhurt', async (speaker: string, name: string, number: string, number2: string) => {
+        if (auth.find(e => e.name == speaker)) {
+          if (!name) { command_print("/spamhurt (name) (damage) (amount of hits)", speaker); return; }
+  
+          const player: OmeggaPlayer = Omegga.findPlayerByName(name) || undefined;
+          if (!player && name != "*") { font_print("Couldn't find player.", {whisper: speaker, size: 26}); return; }
+  
+          let damage: number = Number(number);
+          let times: number = Number(number2);
+          if (isNaN(damage) || damage < 0) { damage = 1; }
+          if (isNaN(times) || times < 1) { times = 25; }
+  
+          if (name === "*") {
+            let players: IPlayerPositions = await Omegga.getAllPlayerPositions();
+            font_print(`Hurt everyone ${damage} damage ${times} times`, {color: "f66"});
+            for (let i = 0; i < times; i++) {
+              for (let e of players) e.player.damage(damage);
+              await sleep(spamhurt_speed);
+            }  
+          } else if (player) {
+            font_print(`Hurt ${player.name} ${times} times for ${damage} damage`, {whisper: speaker, color: "f66"});
+            for (let i = 0; i < times; i++) {
+              player.damage(damage);
+              await sleep(spamhurt_speed);
+            }  
+          } else { font_print(`Couldn't find ${name}`, {whisper: speaker}); }
+        } else { warn_print(`You're not authorized`, speaker); }
+      });
+      commands_array.push("hurt", "spamhurt");
+    }
 
-    Omegga.on('cmd:pos', async (speaker: string) => {
-      const pos = await Omegga.getPlayer(speaker).getPosition() || undefined;
-      if (pos) font_print(`You are at (<color="f77">${Math.floor(pos[0])}</>, <color="7f7">${Math.floor(pos[1])}</>, <color="77f">${Math.floor(pos[2])}</>)`, {whisper: speaker, color: "fff"});
-    });5
+    if (this.config["Enable-POS-Command"]) {
+      Omegga.on('cmd:pos', async (speaker: string) => {
+        const pos = await Omegga.getPlayer(speaker).getPosition() || undefined;
+        if (pos) font_print(`You are at (<color="f77">${Math.floor(pos[0])}</>, <color="7f7">${Math.floor(pos[1])}</>, <color="77f">${Math.floor(pos[2])}</>)`, {whisper: speaker, color: "fff"});
+      });
+      commands_array.push("pos");
+    }
 
-    if (enable_dms) {
+    if (this.config["Enable-Direct-Messages"]) {
       Omegga.on('cmd:dm', (speaker: string, name: string, ...values: string[]) => { // is sanitized
         if (!name) { command_print("/dm (name) (message)", speaker); return; }
         const player: OmeggaPlayer = Omegga.findPlayerByName(name) || undefined;
@@ -96,23 +101,28 @@ export default class Plugin implements OmeggaPlugin<Config, Storage> {
         font_print(`<color="c2c"><u>DM</></> Sent (${message.slice(0, 14)}...) to  <color="6dd">${name}</>`, {whisper: speaker});
         font_print(`<color="c2c"><u>DM</></> <color="6dd">${speaker}</>: ${message}`, {whisper: player.name});
       });
+      commands_array.push("dm");
     }
 
-    Omegga.on('cmd:middle', (speaker: string, ...values: string[]) => { // auth only, test with allowing rich text
-      if (auth.find(e => e.name == speaker)) {
-        const string: string = values.join(" ") || undefined;
-        if (!string) { font_print("Requires a message.", {whisper: speaker}); return; }
-
-        font_print(string, {whisper: "middle"});
-      } else { warn_print(`You're not authorized`, speaker); }
-    }); 
-
-    function command_print(string: string, whisper: string) 
+    if (this.config["Enable-Middle-Command"]) 
     {
+      Omegga.on('cmd:middle', (speaker: string, ...values: string[]) => { // auth only, test with allowing rich text
+        if (auth.find(e => e.name == speaker)) {
+          const string: string = values.join(" ") || undefined;
+          if (!string) { font_print("Requires a message.", {whisper: speaker}); return; }
+  
+          font_print(string, {whisper: "middle"});
+        } else { warn_print(`You're not authorized`, speaker); }
+      }); 
+      commands_array.push("middle");
+    }
+
+
+    function command_print(string: string, whisper: string) {
       font_print(string, {whisper: whisper, code: true, size: 20, color: "fff"});
     }
-    function warn_print(string: string, whisper: string) 
-    {
+
+    function warn_print(string: string, whisper: string) {
       font_print(string, {whisper: whisper, size: 18, color: "f88"});
     }
     function font_print(message: string, options?: {whisper?: string, size?: number, color?: string, code?: boolean}) {
@@ -132,7 +142,7 @@ export default class Plugin implements OmeggaPlugin<Config, Storage> {
       return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    return { registeredCommands: ['hurt', 'spamhurt', 'pos', 'dm', 'middle'] };
-  }
+    return { registeredCommands: commands_array };
+  } 
   async stop() { }
 }

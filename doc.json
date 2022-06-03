@@ -4,11 +4,29 @@
   "author": "Kodi022",
   "config": 
   {
-    "Authorized-Users": 
+    "Enable-Hurt-Commands": 
     {
-      "description": "For use of restricted commands",
-      "type": "players",
-      "default": []
+      "description": "Should Hurt commands be available to use?",
+      "type": "boolean",
+      "default": true
+    },
+    "Enable-DM-Command": 
+    {
+      "description": "Should Direct Message command be available to use?",
+      "type": "boolean",
+      "default": true
+    },
+    "Enable-Middle-Command": 
+    {
+      "description": "Should Middle print command be available to use?",
+      "type": "boolean",
+      "default": true
+    },
+    "Enable-POS-Command": 
+    {
+      "description": "Should POS be available to use?",
+      "type": "boolean",
+      "default": true
     },
     "Spamhurt-Speed": 
     {
@@ -16,11 +34,11 @@
       "type": "number",
       "default": 100
     },
-    "Enable-Direct-Messages": 
+    "Authorized-Users": 
     {
-      "description": "Should Direct messages be allowed on the server?",
-      "type": "boolean",
-      "default": true
+      "description": "For use of restricted commands",
+      "type": "players",
+      "default": []
     }
   },
   "commands": 
